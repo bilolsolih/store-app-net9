@@ -1,0 +1,13 @@
+bin/
+obj/
+.idea/
+
+
+# NuGet Packages
+*.nupkg
+packages/
+
+# Visual Studio-specific files
+.vscode/
+.vs/
+*.code-workspace
