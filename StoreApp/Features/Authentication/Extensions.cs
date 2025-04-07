@@ -30,6 +30,7 @@ public static class AuthenticationExtensions
             };
         });
         services.AddScoped<UserRepository>();
+        services.AddScoped<OtpRepository>();
         services.AddScoped<TokenService>();
         services.AddScoped<UserService>();
     }

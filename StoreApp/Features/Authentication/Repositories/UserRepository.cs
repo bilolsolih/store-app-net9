@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using StoreApp.Features.Authentication.DTOs;
-using StoreApp.Features.Authentication.Filters;
 using StoreApp.Features.Authentication.Models;
 
 namespace StoreApp.Features.Authentication.Repositories;
@@ -35,18 +32,13 @@ public class UserRepository(StoreDbContext context, IMapper mapper)
     return exists;
   }
 
-  public async Task<User?> GetUserByLoginAsync(string value)
+  public async Task<User?> GetByEmailAsync(string email)
   {
-    var user = await context.Users.SingleOrDefaultAsync(u => u.Email == value);
-    return user;
+    return await context.Users.SingleOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
   }
 
-  public async Task<bool> CheckUserExistsByLoginAsync(string value)
+  public async Task<bool> ExistsByEmailAsync(string email)
   {
-    var exists = await context.Users.AnyAsync(
-      u => u.Email == value
-    );
-    return exists;
+    return await context.Users.AnyAsync(u => u.Email.ToLower() == email.ToLower());
   }
-  
 }

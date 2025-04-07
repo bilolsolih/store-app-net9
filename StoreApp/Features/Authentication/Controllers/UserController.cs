@@ -8,7 +8,7 @@ using StoreApp.Features.Authentication.Services;
 namespace StoreApp.Features.Authentication.Controllers;
 
 [ApiController, Route("api/v1/auth")]
-public class UserController(UserService service, TokenService tokenService) : ControllerBase
+public class UserController(UserService service, TokenService tokenService, StoreDbContext context) : ControllerBase
 {
   [HttpPost("login")]
   public async Task<IActionResult> Login(LoginDto payload)
@@ -57,5 +57,26 @@ public class UserController(UserService service, TokenService tokenService) : Co
     var userId = int.Parse(User.FindFirstValue("userid")!);
     var user = await service.UpdateUserAsync(userId, payload);
     return Ok(user);
+  }
+
+  [HttpPost("reset-password/email")]
+  public async Task<ActionResult> SendOtpToEmail(SendOtpDto payload)
+  {
+    await service.SendOtpToEmailAsync(payload);
+    return Ok();
+  }
+
+  [HttpPost("reset-password/verify")]
+  public async Task<ActionResult<bool>> VerifyOtp(VerifyOtpDto payload)
+  {
+    var result = await service.VerifyOtpAsync(payload);
+    return Ok(result);
+  }
+
+  [HttpPost("reset-password/reset")]
+  public async Task<ActionResult<User>> ResetPassword(ResetPasswordDto payload)
+  {
+    var updatedUser = await service.ResetPasswordAsync(payload);
+    return Ok(updatedUser);
   }
 }

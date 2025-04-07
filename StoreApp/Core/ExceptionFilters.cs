@@ -23,6 +23,11 @@ public class CoreExceptionFilters : IExceptionFilter
         statusCode = 404;
         context.Result = new ObjectResult(message.ToString()) { StatusCode = statusCode };
         break;
+      case OtpCodeExpiredException exc:
+        message.Append($"Otp Code has expired. {exc.Message}");
+        statusCode = 400;
+        context.Result = new ObjectResult(message.ToString()) { StatusCode = statusCode };
+        break;
     }
   }
 }

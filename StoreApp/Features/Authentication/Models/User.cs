@@ -1,4 +1,6 @@
-﻿namespace StoreApp.Features.Authentication.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace StoreApp.Features.Authentication.Models;
 
 public enum Gender
 {
@@ -16,6 +18,9 @@ public class User
   public DateOnly? BirthDate { get; set; }
   public Gender? Gender { get; set; }
   public string? PhoneNumber { get; set; }
+
+  [JsonIgnore]
+  public ICollection<Otp> Otps { get; set; } = [];
 
   public DateTime Created { get; set; }
   public DateTime Updated { get; set; }
