@@ -11,6 +11,7 @@ namespace StoreApp.Features.Authentication.Services;
 public class UserService(
   UserRepository userRepo,
   OtpRepository otpRepo,
+  IEmailSender emailSender,
   IMapper mapper,
   IWebHostEnvironment webEnv,
   IHttpContextAccessor httpContextAccessor
@@ -72,8 +73,9 @@ public class UserService(
       Code = otpCode.ToString(),
       ExpiryDate = DateTime.UtcNow.AddMinutes(10)
     };
-
     await otpRepo.AddOtpAsync(newOtp);
+
+    await emailSender.SendEmailAsync(user.Email, "Store App verification code", $"Your code: {newOtp.Code}");
   }
 
   public async Task<bool> VerifyOtpAsync(VerifyOtpDto payload)

@@ -5,6 +5,7 @@ using StoreApp.Core;
 using StoreApp.Features.Authentication;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
+using StoreApp.Features.Authentication.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +37,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSqlite<StoreDbContext>(builder.Configuration.GetConnectionString("DefaultConnection"));
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
 
 
 builder.Services.AddSwaggerGen(
@@ -79,7 +81,6 @@ builder.Services.AddSwaggerGen(
 
 
 builder.Services.RegisterAuthenticationFeature(builder.Configuration);
-
 
 
 var app = builder.Build();
