@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StoreApp;
 
@@ -10,9 +11,11 @@ using StoreApp;
 namespace StoreApp.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    partial class StoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250408132435_ProductAndRelatedModels")]
+    partial class ProductAndRelatedModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.3");
@@ -29,7 +32,7 @@ namespace StoreApp.Migrations
 
                     b.HasIndex("SizesId");
 
-                    b.ToTable("product_to_size", (string)null);
+                    b.ToTable("ProductSize");
                 });
 
             modelBuilder.Entity("StoreApp.Features.Authentication.Models.Otp", b =>
