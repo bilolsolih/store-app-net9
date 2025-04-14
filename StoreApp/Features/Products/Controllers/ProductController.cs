@@ -15,7 +15,9 @@ public class ProductController(StoreDbContext context, IMapper mapper) : Control
   [HttpGet("list"), Authorize]
   public async Task<ActionResult<IEnumerable<ProductListDto>>> ListProducts([FromQuery] ProductFilters filters)
   {
-    int.TryParse(User.FindFirstValue("userid"), out var userId);
+    var userId = int.Parse(User.FindFirstValue("userid")!);
+    var user = await context.Users.Include(u => u.SavedProducts).SingleOrDefaultAsync(u => u.Id == userId);
+    DoesNotExistException.ThrowIfNull(user, $"userId: {userId}");
 
     var products = context.Products
       .Include(p => p.ProductImages).AsQueryable();
@@ -30,14 +32,13 @@ public class ProductController(StoreDbContext context, IMapper mapper) : Control
       products = products.Where(p => p.Title.ToLower().Contains(filters.Title.ToLower()));
     }
 
-
     return await products.Select(
       p => new ProductListDto
       {
         Id = p.Id,
         Title = p.Title,
         Image = HttpContext.GetUploadsBaseUrl() + '/' + p.ProductImages.Single(pi => pi.IsMain).Image,
-        IsLiked = false,
+        IsLiked = user.SavedProducts.Contains(p),
         Price = p.Price,
         Discount = 0
       }
