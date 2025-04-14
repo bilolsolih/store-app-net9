@@ -11,6 +11,9 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
     builder.ToTable("users");
     builder.HasKey(u => u.Id);
 
+    builder.HasMany(u => u.SavedProducts)
+      .WithMany();
+
     builder.HasIndex(u => u.Email)
       .IsUnique();
 

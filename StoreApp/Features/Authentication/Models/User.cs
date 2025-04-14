@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using StoreApp.Features.Products.Models;
 
 namespace StoreApp.Features.Authentication.Models;
 
@@ -18,6 +19,8 @@ public class User
   public DateOnly? BirthDate { get; set; }
   public Gender? Gender { get; set; }
   public string? PhoneNumber { get; set; }
+
+  public ICollection<Product> SavedProducts { get; set; } = [];
 
   [JsonIgnore]
   public ICollection<Otp> Otps { get; set; } = [];

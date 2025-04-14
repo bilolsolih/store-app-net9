@@ -15,6 +15,7 @@ public class ProductConfigurations : IEntityTypeConfiguration<Product>
       .WithMany(c => c.Products)
       .HasForeignKey(p => p.CategoryId)
       .OnDelete(DeleteBehavior.Restrict);
+    
 
     builder.HasMany(p => p.Sizes)
       .WithMany(s => s.Products)

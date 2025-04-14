@@ -1,6 +1,8 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using StoreApp.Core.Exceptions;
 using StoreApp.Features.Authentication.DTOs;
 using StoreApp.Features.Authentication.Models;
 using StoreApp.Features.Authentication.Services;
@@ -78,5 +80,35 @@ public class UserController(UserService service, TokenService tokenService, Stor
   {
     var updatedUser = await service.ResetPasswordAsync(payload);
     return Ok(updatedUser);
+  }
+
+  [HttpPost("save/{id:int}"), Authorize]
+  public async Task<ActionResult> SaveProduct(int id)
+  {
+    var userId = int.Parse(User.FindFirstValue("userid")!);
+    var product = await context.Products.FindAsync(id);
+    DoesNotExistException.ThrowIfNull(product, $"product_id: {id}");
+
+    var user = await context.Users.FindAsync(userId);
+    DoesNotExistException.ThrowIfNull(user, $"user_id: {userId}");
+
+    user.SavedProducts.Add(product);
+    await context.SaveChangesAsync();
+    return Ok();
+  }
+
+  [HttpPost("unsave/{id:int}"), Authorize]
+  public async Task<ActionResult> UnsaveProduct(int id)
+  {
+    var userId = int.Parse(User.FindFirstValue("userid")!);
+    var product = await context.Products.FindAsync(id);
+    DoesNotExistException.ThrowIfNull(product, $"product_id: {id}");
+
+    var user = await context.Users.Include(u => u.SavedProducts).SingleOrDefaultAsync(u => u.Id == userId);
+    DoesNotExistException.ThrowIfNull(user, $"user_id: {userId}");
+
+    user.SavedProducts.Remove(product);
+    await context.SaveChangesAsync();
+    return Ok();
   }
 }

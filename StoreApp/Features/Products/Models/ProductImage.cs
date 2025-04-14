@@ -9,7 +9,7 @@ public class ProductImage
   public required bool IsMain { get; set; }
 
   [JsonIgnore]
-  public required Product Product { get; set; }
+  public Product Product { get; set; }
 
   public required int ProductId { get; set; }
 
