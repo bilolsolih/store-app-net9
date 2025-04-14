@@ -62,6 +62,8 @@ public class ProductController(StoreDbContext context, IMapper mapper) : Control
       {
         products[i].Image = HttpContext.GetUploadsBaseUrl() + '/' + products[i].Image;
       }
+
+      products[i].IsLiked = true;
     }
 
 
