@@ -1,4 +1,6 @@
-﻿namespace StoreApp.Features.Products.Models;
+﻿using StoreApp.Features.Reviews.Models;
+
+namespace StoreApp.Features.Products.Models;
 
 public class Product
 {
@@ -13,6 +15,7 @@ public class Product
 
   public ICollection<ProductImage> ProductImages { get; set; } = [];
   public ICollection<Size> Sizes { get; set; } = [];
+  public ICollection<Review> Reviews { get; set; } = [];
 
   public DateTime Created { get; set; }
   public DateTime Updated { get; set; }

@@ -3,6 +3,7 @@ using StoreApp.Features.Authentication.Configurations;
 using StoreApp.Features.Authentication.Models;
 using StoreApp.Features.Products.Configurations;
 using StoreApp.Features.Products.Models;
+using StoreApp.Features.Reviews.Configurations;
 
 namespace StoreApp;
 
@@ -25,5 +26,6 @@ public class StoreDbContext(DbContextOptions<StoreDbContext> options) : DbContex
     modelBuilder.ApplyConfiguration(new SizeConfigurations());
     modelBuilder.ApplyConfiguration(new ProductConfigurations());
     modelBuilder.ApplyConfiguration(new ProductImageConfigurations());
+    modelBuilder.ApplyConfiguration(new ReviewConfigurations());
   }
 }

@@ -20,7 +20,9 @@ public class ProductController(StoreDbContext context, IMapper mapper) : Control
     DoesNotExistException.ThrowIfNull(user, $"userId: {userId}");
 
     var products = context.Products
-      .Include(p => p.ProductImages).AsQueryable();
+      .Include(p => p.ProductImages)
+      .Include(p => p.Sizes)
+      .AsQueryable();
 
     if (filters is { CategoryId: not null })
     {
@@ -30,6 +32,26 @@ public class ProductController(StoreDbContext context, IMapper mapper) : Control
     if (filters is { Title: not null })
     {
       products = products.Where(p => p.Title.ToLower().Contains(filters.Title.ToLower()));
+    }
+
+    if (filters is { SizeId: not null })
+    {
+      products = products.Where(p => p.Sizes.Any(s => s.Id == filters.SizeId));
+    }
+
+    if (filters is { MinPrice: not null, MaxPrice: not null })
+    {
+      products = products.Where(p => p.Price >= filters.MinPrice && p.Price <= filters.MaxPrice);
+    }
+
+    if (filters is { OrderBy: not null })
+    {
+      products = filters.OrderBy.ToLower() switch
+      {
+        "-price" => products.OrderByDescending(p => p.Price),
+        "price" => products.OrderBy(p => p.Price),
+        _ => products.OrderBy(p => p.Created)
+      };
     }
 
     return await products.Select(
