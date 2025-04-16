@@ -4,6 +4,7 @@ using StoreApp.Features.Authentication.Models;
 using StoreApp.Features.Products.Configurations;
 using StoreApp.Features.Products.Models;
 using StoreApp.Features.Reviews.Configurations;
+using StoreApp.Features.Reviews.Models;
 
 namespace StoreApp;
 
@@ -16,6 +17,7 @@ public class StoreDbContext(DbContextOptions<StoreDbContext> options) : DbContex
   public DbSet<Size> Sizes { get; set; }
   public DbSet<Product> Products { get; set; }
   public DbSet<ProductImage> ProductImages { get; set; }
+  public DbSet<Review> Reviews { get; set; }
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
