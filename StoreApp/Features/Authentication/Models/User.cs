@@ -21,6 +21,7 @@ public class User
   public string? PhoneNumber { get; set; }
 
   public ICollection<Product> SavedProducts { get; set; } = [];
+  public ICollection<Device> Devices { get; set; } = [];
 
   [JsonIgnore]
   public ICollection<Otp> Otps { get; set; } = [];

@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StoreApp.Features.Authentication.Configurations;
 using StoreApp.Features.Authentication.Models;
+using StoreApp.Features.Notifications.Configurations;
+using StoreApp.Features.Notifications.Models;
 using StoreApp.Features.Products.Configurations;
 using StoreApp.Features.Products.Models;
 using StoreApp.Features.Reviews.Configurations;
@@ -11,6 +13,7 @@ namespace StoreApp;
 public class StoreDbContext(DbContextOptions<StoreDbContext> options) : DbContext(options)
 {
   public DbSet<User> Users { get; set; }
+  public DbSet<Device> Devices { get; set; }
   public DbSet<Otp> Otps { get; set; }
 
   public DbSet<Category> Categories { get; set; }
@@ -19,15 +22,22 @@ public class StoreDbContext(DbContextOptions<StoreDbContext> options) : DbContex
   public DbSet<ProductImage> ProductImages { get; set; }
   public DbSet<Review> Reviews { get; set; }
 
+  public DbSet<NotificationType> NotificationTypes { get; set; }
+  public DbSet<Notification> Notifications { get; set; }
+
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     base.OnModelCreating(modelBuilder);
     modelBuilder.ApplyConfiguration(new UserConfigurations());
+    modelBuilder.ApplyConfiguration(new DeviceConfigurations());
     modelBuilder.ApplyConfiguration(new OtpConfigurations());
     modelBuilder.ApplyConfiguration(new CategoryConfigurations());
     modelBuilder.ApplyConfiguration(new SizeConfigurations());
     modelBuilder.ApplyConfiguration(new ProductConfigurations());
     modelBuilder.ApplyConfiguration(new ProductImageConfigurations());
     modelBuilder.ApplyConfiguration(new ReviewConfigurations());
+
+    modelBuilder.ApplyConfiguration(new NotificationTypeConfigurations());
+    modelBuilder.ApplyConfiguration(new NotificationConfigurations());
   }
 }

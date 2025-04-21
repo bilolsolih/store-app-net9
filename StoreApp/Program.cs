@@ -6,6 +6,7 @@ using StoreApp.Features.Authentication;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
 using StoreApp.Features.Authentication.Services;
+using StoreApp.Features.Notifications;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,6 +82,7 @@ builder.Services.AddSwaggerGen(
 
 
 builder.Services.RegisterAuthenticationFeature(builder.Configuration);
+builder.Services.RegisterNotificationsFeature();
 
 
 var app = builder.Build();

@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +10,10 @@ using StoreApp.Features.Products.Filters;
 
 namespace StoreApp.Features.Products.Controllers;
 
-[ApiController, Route("api/v1/products")]
+[ApiController, Route("api/v1/products"), Authorize]
 public class ProductController(StoreDbContext context, IMapper mapper) : ControllerBase
 {
-  [HttpGet("list"), Authorize]
+  [HttpGet("list")]
   public async Task<ActionResult<IEnumerable<ProductListDto>>> ListProducts([FromQuery] ProductFilters filters)
   {
     var userId = int.Parse(User.FindFirstValue("userid")!);
@@ -54,8 +55,7 @@ public class ProductController(StoreDbContext context, IMapper mapper) : Control
       };
     }
 
-    return await products.Select(
-      p => new ProductListDto
+    return await products.Select(p => new ProductListDto
       {
         Id = p.Id,
         Title = p.Title,
@@ -67,8 +67,33 @@ public class ProductController(StoreDbContext context, IMapper mapper) : Control
     ).ToListAsync();
   }
 
+  [HttpGet("detail/{id:int}")]
+  public async Task<ActionResult<ProductDetailDto>> RetrieveProduct(int id)
+  {
+    var userId = int.Parse(User.FindFirstValue("userid")!);
+    var user = await context.Users
+      .Include(u => u.SavedProducts)
+      .SingleOrDefaultAsync(u => u.Id == userId);
+    DoesNotExistException.ThrowIfNull(user, $"userId: {userId}");
 
-  [HttpGet("saved-products"), Authorize]
+    var product = await context.Products
+      .Include(p => p.Reviews)
+      .Include(p => p.ProductImages)
+      .Include(p => p.Sizes)
+      .ProjectTo<ProductDetailDto>(mapper.ConfigurationProvider)
+      .SingleOrDefaultAsync(p => p.Id == id);
+
+    DoesNotExistException.ThrowIfNull(product, $"productId: {id}");
+
+    var isLiked = user.SavedProducts.Any(sp => sp.Id == product.Id);
+    product.IsLiked = isLiked;
+
+    product.ProductImages.ForEach(image => image.Image = HttpContext.GetUploadsBaseUrl() + '/' + image.Image);
+
+    return Ok(product);
+  }
+
+  [HttpGet("saved-products")]
   public async Task<ActionResult<IEnumerable<ProductListDto>>> GetSavedProducts()
   {
     var userId = int.Parse(User.FindFirstValue("userid")!);

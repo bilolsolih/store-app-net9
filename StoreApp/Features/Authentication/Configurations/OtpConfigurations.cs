@@ -36,12 +36,12 @@ public class OtpConfigurations : IEntityTypeConfiguration<Otp>
       .HasColumnName("expiry_date")
       .IsRequired();
     
-    builder.Property(u => u.Created)
+    builder.Property(c => c.Created)
       .HasColumnName("created")
       .HasDefaultValueSql("CURRENT_TIMESTAMP")
       .ValueGeneratedOnAdd();
 
-    builder.Property(u => u.Updated)
+    builder.Property(c => c.Updated)
       .HasColumnName("updated")
       .HasDefaultValueSql("CURRENT_TIMESTAMP")
       .ValueGeneratedOnAdd();

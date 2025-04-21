@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StoreApp;
 
@@ -10,27 +11,14 @@ using StoreApp;
 namespace StoreApp.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    partial class StoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250417124834_DeviceModel")]
+    partial class DeviceModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.3");
-
-            modelBuilder.Entity("DeviceNotification", b =>
-                {
-                    b.Property<int>("ReceivedNotificationsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("SentDevicesId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ReceivedNotificationsId", "SentDevicesId");
-
-                    b.HasIndex("SentDevicesId");
-
-                    b.ToTable("DeviceNotification");
-                });
 
             modelBuilder.Entity("ProductSize", b =>
                 {
@@ -200,86 +188,6 @@ namespace StoreApp.Migrations
                         .IsUnique();
 
                     b.ToTable("users", (string)null);
-                });
-
-            modelBuilder.Entity("StoreApp.Features.Notifications.Models.Notification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Body")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("body");
-
-                    b.Property<DateTime>("Created")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("created")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("NotificationTypeId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("title");
-
-                    b.Property<DateTime>("Updated")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("updated")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NotificationTypeId");
-
-                    b.ToTable("notifications", (string)null);
-                });
-
-            modelBuilder.Entity("StoreApp.Features.Notifications.Models.NotificationType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("id");
-
-                    b.Property<DateTime>("Created")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("created")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<string>("Icon")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("icon");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("title");
-
-                    b.Property<DateTime>("Updated")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("updated")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Title")
-                        .IsUnique();
-
-                    b.ToTable("notification_types", (string)null);
                 });
 
             modelBuilder.Entity("StoreApp.Features.Products.Models.Category", b =>
@@ -489,21 +397,6 @@ namespace StoreApp.Migrations
                     b.ToTable("reviews", (string)null);
                 });
 
-            modelBuilder.Entity("DeviceNotification", b =>
-                {
-                    b.HasOne("StoreApp.Features.Notifications.Models.Notification", null)
-                        .WithMany()
-                        .HasForeignKey("ReceivedNotificationsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StoreApp.Features.Authentication.Models.Device", null)
-                        .WithMany()
-                        .HasForeignKey("SentDevicesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("ProductSize", b =>
                 {
                     b.HasOne("StoreApp.Features.Products.Models.Product", null)
@@ -554,17 +447,6 @@ namespace StoreApp.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("StoreApp.Features.Notifications.Models.Notification", b =>
-                {
-                    b.HasOne("StoreApp.Features.Notifications.Models.NotificationType", "NotificationType")
-                        .WithMany()
-                        .HasForeignKey("NotificationTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("NotificationType");
                 });
 
             modelBuilder.Entity("StoreApp.Features.Products.Models.Product", b =>
