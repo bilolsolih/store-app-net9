@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,5 +28,16 @@ public class NotificationController(StoreDbContext context, IMapper mapper, Fire
 
     await firebaseService.SendNotificationToDevices(devices: devices, notification: newNotification);
     return Ok();
+  }
+
+  [HttpGet("list")]
+  public async Task<ActionResult<NotificationListDto>> ListAllNotifications()
+  {
+    var notifications = await context.Notifications
+      .ProjectTo<NotificationListDto>(mapper.ConfigurationProvider)
+      .ToListAsync();
+
+    notifications.ForEach(n => { n.Icon = $"{HttpContext.GetUploadsBaseUrl()}/{n.Icon}"; });
+    return Ok(notifications);
   }
 }
