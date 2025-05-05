@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using StoreApp.Features.Cart.Models;
 using StoreApp.Features.Products.Models;
 
 namespace StoreApp.Features.Authentication.Models;
@@ -22,6 +23,7 @@ public class User
 
   public ICollection<Product> SavedProducts { get; set; } = [];
   public ICollection<Device> Devices { get; set; } = [];
+  public UserCart Cart { get; set; }
 
   [JsonIgnore]
   public ICollection<Otp> Otps { get; set; } = [];
