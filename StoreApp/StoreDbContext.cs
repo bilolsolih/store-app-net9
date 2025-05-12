@@ -15,8 +15,10 @@ namespace StoreApp;
 public class StoreDbContext(DbContextOptions<StoreDbContext> options) : DbContext(options)
 {
   public DbSet<User> Users { get; set; }
+  public DbSet<Address> Addresses { get; set; }
   public DbSet<Device> Devices { get; set; }
   public DbSet<Otp> Otps { get; set; }
+  public DbSet<Card> Cards { get; set; }
 
   public DbSet<Category> Categories { get; set; }
   public DbSet<Size> Sizes { get; set; }
@@ -30,22 +32,25 @@ public class StoreDbContext(DbContextOptions<StoreDbContext> options) : DbContex
   public DbSet<UserCart> UserCarts { get; set; }
   public DbSet<CartItem> CartItems { get; set; }
 
-  protected override void OnModelCreating(ModelBuilder modelBuilder)
+  protected override void OnModelCreating(ModelBuilder builder)
   {
-    base.OnModelCreating(modelBuilder);
-    modelBuilder.ApplyConfiguration(new UserConfigurations());
-    modelBuilder.ApplyConfiguration(new DeviceConfigurations());
-    modelBuilder.ApplyConfiguration(new OtpConfigurations());
-    modelBuilder.ApplyConfiguration(new CategoryConfigurations());
-    modelBuilder.ApplyConfiguration(new SizeConfigurations());
-    modelBuilder.ApplyConfiguration(new ProductConfigurations());
-    modelBuilder.ApplyConfiguration(new ProductImageConfigurations());
-    modelBuilder.ApplyConfiguration(new ReviewConfigurations());
+    base.OnModelCreating(builder);
+    builder.ApplyConfiguration(new UserConfigurations());
+    builder.ApplyConfiguration(new AddressConfigurations());
+    builder.ApplyConfiguration(new DeviceConfigurations());
+    builder.ApplyConfiguration(new OtpConfigurations());
+    builder.ApplyConfiguration(new CardConfigurations());
 
-    modelBuilder.ApplyConfiguration(new NotificationTypeConfigurations());
-    modelBuilder.ApplyConfiguration(new NotificationConfigurations());
+    builder.ApplyConfiguration(new CategoryConfigurations());
+    builder.ApplyConfiguration(new SizeConfigurations());
+    builder.ApplyConfiguration(new ProductConfigurations());
+    builder.ApplyConfiguration(new ProductImageConfigurations());
+    builder.ApplyConfiguration(new ReviewConfigurations());
 
-    modelBuilder.ApplyConfiguration(new UserCartConfigurations());
-    modelBuilder.ApplyConfiguration(new CartItemConfigurations());
+    builder.ApplyConfiguration(new NotificationTypeConfigurations());
+    builder.ApplyConfiguration(new NotificationConfigurations());
+
+    builder.ApplyConfiguration(new UserCartConfigurations());
+    builder.ApplyConfiguration(new CartItemConfigurations());
   }
 }

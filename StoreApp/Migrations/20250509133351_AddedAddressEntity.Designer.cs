@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StoreApp;
 
@@ -10,9 +11,11 @@ using StoreApp;
 namespace StoreApp.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    partial class StoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250509133351_AddedAddressEntity")]
+    partial class AddedAddressEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.3");
@@ -114,53 +117,6 @@ namespace StoreApp.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("addresses", (string)null);
-                });
-
-            modelBuilder.Entity("StoreApp.Features.Authentication.Models.Card", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("id");
-
-                    b.Property<string>("CardNumber")
-                        .IsRequired()
-                        .HasMaxLength(16)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("card_number");
-
-                    b.Property<DateTime>("Created")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("created")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<DateOnly>("ExpiryDate")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("expiry_date");
-
-                    b.Property<string>("SecurityCode")
-                        .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("security_code");
-
-                    b.Property<DateTime>("Updated")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("updated")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId", "CardNumber")
-                        .IsUnique();
-
-                    b.ToTable("cards", (string)null);
                 });
 
             modelBuilder.Entity("StoreApp.Features.Authentication.Models.Device", b =>
@@ -722,17 +678,6 @@ namespace StoreApp.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("StoreApp.Features.Authentication.Models.Card", b =>
-                {
-                    b.HasOne("StoreApp.Features.Authentication.Models.User", "User")
-                        .WithMany("Cards")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("StoreApp.Features.Authentication.Models.Device", b =>
                 {
                     b.HasOne("StoreApp.Features.Authentication.Models.User", "User")
@@ -846,8 +791,6 @@ namespace StoreApp.Migrations
             modelBuilder.Entity("StoreApp.Features.Authentication.Models.User", b =>
                 {
                     b.Navigation("Addresses");
-
-                    b.Navigation("Cards");
 
                     b.Navigation("Cart")
                         .IsRequired();

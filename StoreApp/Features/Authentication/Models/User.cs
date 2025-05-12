@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using StoreApp.Core;
 using StoreApp.Features.Cart.Models;
 using StoreApp.Features.Products.Models;
 
@@ -10,9 +11,8 @@ public enum Gender
   Female
 }
 
-public class User
+public class User : BaseModel
 {
-  public int Id { get; set; }
   public required string FullName { get; set; }
   public required string Email { get; set; }
   public required string Password { get; set; }
@@ -23,11 +23,10 @@ public class User
 
   public ICollection<Product> SavedProducts { get; set; } = [];
   public ICollection<Device> Devices { get; set; } = [];
+  public ICollection<Address> Addresses { get; set; } = [];
+  public ICollection<Card> Cards { get; set; } = [];
   public UserCart Cart { get; set; }
 
   [JsonIgnore]
   public ICollection<Otp> Otps { get; set; } = [];
-
-  public DateTime Created { get; set; }
-  public DateTime Updated { get; set; }
 }

@@ -44,7 +44,7 @@ builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpS
 builder.Services.AddSwaggerGen(
   options =>
   {
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Recipe API", Version = "v1" });
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "StoreApp API", Version = "v1" });
 
     // Define JWT security scheme
     options.AddSecurityDefinition(
