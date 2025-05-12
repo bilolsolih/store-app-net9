@@ -84,11 +84,14 @@ public class CartItemController(StoreDbContext context, IMapper mapper) : Contro
       .Where(c => c.UserCart.UserId == user.Id)
       .ToListAsync();
 
+    var mappedCartItems = mapper.Map<List<CartItemListDto>>(cartItems);
+    mappedCartItems.ForEach(item=>item.Image = $"{HttpContext.GetUploadsBaseUrl()}/{item.Image}");
+
     var subTotal = cartItems.Sum(c => c.Product.Price * c.Quantity);
 
     var myCart = new MyCartDto
     {
-      Items = mapper.Map<List<CartItemListDto>>(cartItems),
+      Items = mappedCartItems,
       ShippingFee = 80,
       SubTotal = subTotal,
       VAT = 0,
@@ -97,6 +100,4 @@ public class CartItemController(StoreDbContext context, IMapper mapper) : Contro
 
     return Ok(myCart);
   }
-  
-  
 }
