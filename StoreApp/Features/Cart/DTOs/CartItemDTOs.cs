@@ -9,6 +9,7 @@ public record CartItemCreateDto
 public record CartItemListDto
 {
   public required int Id { get; set; }
+  public required int ProductId { get; set; }
   public required string Title { get; set; }
   public required string Size { get; set; }
   public required double Price { get; set; }

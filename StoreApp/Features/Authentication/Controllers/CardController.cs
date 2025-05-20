@@ -47,7 +47,28 @@ public class CardController(StoreDbContext context, IMapper mapper) : Controller
       .Where(c => c.UserId == user.Id)
       .ProjectTo<CardListDto>(mapper.ConfigurationProvider)
       .ToListAsync();
-    
+
     return Ok(cards);
+  }
+
+  [HttpDelete("delete/{id:int}")]
+  public async Task<ActionResult> DeleteCard(int id)
+  {
+    var userId = int.Parse(User.FindFirstValue("userid")!);
+    var user = await context.Users.FindAsync(userId);
+    DoesNotExistException.ThrowIfNull(user, $"userId: {userId}");
+
+    var card = await context.Cards.FindAsync(id);
+    DoesNotExistException.ThrowIfNull(card, "Such card does not exist.");
+
+    if (card.UserId != user.Id)
+    {
+      return Forbid("This card does not belong to the user.");
+    }
+
+    context.Cards.Remove(card);
+    await context.SaveChangesAsync();
+
+    return NoContent();
   }
 }

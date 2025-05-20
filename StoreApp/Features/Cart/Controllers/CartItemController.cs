@@ -80,12 +80,13 @@ public class CartItemController(StoreDbContext context, IMapper mapper) : Contro
 
     var cartItems = await context.CartItems
       .Include(c => c.Product).ThenInclude(p => p.ProductImages)
+      .Include(c => c.Size)
       .Include(c => c.UserCart)
       .Where(c => c.UserCart.UserId == user.Id)
       .ToListAsync();
 
     var mappedCartItems = mapper.Map<List<CartItemListDto>>(cartItems);
-    mappedCartItems.ForEach(item=>item.Image = $"{HttpContext.GetUploadsBaseUrl()}/{item.Image}");
+    mappedCartItems.ForEach(item => item.Image = $"{HttpContext.GetUploadsBaseUrl()}/{item.Image}");
 
     var subTotal = cartItems.Sum(c => c.Product.Price * c.Quantity);
 
@@ -99,5 +100,29 @@ public class CartItemController(StoreDbContext context, IMapper mapper) : Contro
     };
 
     return Ok(myCart);
+  }
+
+  [HttpDelete("delete/{id:int}")]
+  public async Task<ActionResult> DeleteCartItem(int id)
+  {
+    var userId = int.Parse(User.FindFirstValue("userid")!);
+    var user = await context.Users.FindAsync(userId);
+    DoesNotExistException.ThrowIfNull(user, $"userId: {userId}");
+
+    var cartItem = await context.CartItems.FindAsync(id);
+    DoesNotExistException.ThrowIfNull(cartItem, "Such item does not exist.");
+
+    var cart = await context.UserCarts.SingleOrDefaultAsync(c => c.UserId == user.Id);
+    DoesNotExistException.ThrowIfNull(cart, "User does not have a cart.");
+
+    if (cartItem.UserCartId != cart.Id)
+    {
+      return Forbid("This item does not belong to the user.");
+    }
+
+    context.CartItems.Remove(cartItem);
+    await context.SaveChangesAsync();
+
+    return NoContent();
   }
 }

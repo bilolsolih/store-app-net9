@@ -58,6 +58,7 @@ public class ProductController(StoreDbContext context, IMapper mapper) : Control
     return await products.Select(p => new ProductListDto
       {
         Id = p.Id,
+        CategoryId = p.CategoryId,
         Title = p.Title,
         Image = HttpContext.GetUploadsBaseUrl() + '/' + p.ProductImages.Single(pi => pi.IsMain).Image,
         IsLiked = user.SavedProducts.Contains(p),

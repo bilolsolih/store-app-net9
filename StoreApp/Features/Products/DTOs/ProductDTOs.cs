@@ -3,6 +3,7 @@
 public record ProductListDto
 {
   public required int Id { get; set; }
+  public required int CategoryId { get; set; }
   public string? Image { get; set; }
   public required string Title { get; set; }
   public required double Price { get; set; }

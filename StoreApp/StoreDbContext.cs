@@ -5,6 +5,8 @@ using StoreApp.Features.Cart.Configurations;
 using StoreApp.Features.Cart.Models;
 using StoreApp.Features.Notifications.Configurations;
 using StoreApp.Features.Notifications.Models;
+using StoreApp.Features.Orders.Configurations;
+using StoreApp.Features.Orders.Models;
 using StoreApp.Features.Products.Configurations;
 using StoreApp.Features.Products.Models;
 using StoreApp.Features.Reviews.Configurations;
@@ -32,6 +34,9 @@ public class StoreDbContext(DbContextOptions<StoreDbContext> options) : DbContex
   public DbSet<UserCart> UserCarts { get; set; }
   public DbSet<CartItem> CartItems { get; set; }
 
+  public DbSet<OrderItem> OrderItems { get; set; }
+  public DbSet<Order> Orders { get; set; }
+
   protected override void OnModelCreating(ModelBuilder builder)
   {
     base.OnModelCreating(builder);
@@ -52,5 +57,8 @@ public class StoreDbContext(DbContextOptions<StoreDbContext> options) : DbContex
 
     builder.ApplyConfiguration(new UserCartConfigurations());
     builder.ApplyConfiguration(new CartItemConfigurations());
+
+    builder.ApplyConfiguration(new OrderItemConfigurations());
+    builder.ApplyConfiguration(new OrderConfigurations());
   }
 }

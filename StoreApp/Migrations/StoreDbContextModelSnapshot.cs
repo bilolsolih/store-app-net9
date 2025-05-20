@@ -459,6 +459,120 @@ namespace StoreApp.Migrations
                     b.ToTable("notification_types", (string)null);
                 });
 
+            modelBuilder.Entity("StoreApp.Features.Orders.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("id");
+
+                    b.Property<int>("AddressId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("address_id");
+
+                    b.Property<int?>("CardId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("card_id");
+
+                    b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("created")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("payment_method");
+
+                    b.Property<double>("ShippingFee")
+                        .HasColumnType("REAL")
+                        .HasColumnName("shipping_fee");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("status");
+
+                    b.Property<double>("SubTotal")
+                        .HasColumnType("REAL")
+                        .HasColumnName("sub_total");
+
+                    b.Property<double>("Total")
+                        .HasColumnType("REAL")
+                        .HasColumnName("total");
+
+                    b.Property<DateTime>("Updated")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("updated")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("VAT")
+                        .HasColumnType("REAL")
+                        .HasColumnName("vat");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
+
+                    b.HasIndex("CardId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("orders", (string)null);
+                });
+
+            modelBuilder.Entity("StoreApp.Features.Orders.Models.OrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("created")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("PriceTotal")
+                        .HasColumnType("REAL")
+                        .HasColumnName("price_total");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("product_id");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("quantity");
+
+                    b.Property<int>("SizeId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("size_id");
+
+                    b.Property<DateTime>("Updated")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("updated")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SizeId");
+
+                    b.ToTable("order_items", (string)null);
+                });
+
             modelBuilder.Entity("StoreApp.Features.Products.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -804,6 +918,59 @@ namespace StoreApp.Migrations
                     b.Navigation("NotificationType");
                 });
 
+            modelBuilder.Entity("StoreApp.Features.Orders.Models.Order", b =>
+                {
+                    b.HasOne("StoreApp.Features.Authentication.Models.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("StoreApp.Features.Authentication.Models.Card", "Card")
+                        .WithMany()
+                        .HasForeignKey("CardId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("StoreApp.Features.Authentication.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+
+                    b.Navigation("Card");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("StoreApp.Features.Orders.Models.OrderItem", b =>
+                {
+                    b.HasOne("StoreApp.Features.Orders.Models.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StoreApp.Features.Products.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("StoreApp.Features.Products.Models.Size", "Size")
+                        .WithMany()
+                        .HasForeignKey("SizeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Size");
+                });
+
             modelBuilder.Entity("StoreApp.Features.Products.Models.Product", b =>
                 {
                     b.HasOne("StoreApp.Features.Products.Models.Category", "Category")
@@ -860,6 +1027,11 @@ namespace StoreApp.Migrations
             modelBuilder.Entity("StoreApp.Features.Cart.Models.UserCart", b =>
                 {
                     b.Navigation("CartItems");
+                });
+
+            modelBuilder.Entity("StoreApp.Features.Orders.Models.Order", b =>
+                {
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("StoreApp.Features.Products.Models.Category", b =>
