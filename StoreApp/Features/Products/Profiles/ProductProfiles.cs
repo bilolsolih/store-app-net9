@@ -14,6 +14,10 @@ public class ProductProfiles : Profile
     CreateMap<Size, ProductSize>();
     CreateMap<Product, ProductDetailDto>()
       .ForMember(dest => dest.ReviewsCount, opts => opts.MapFrom(src => src.Reviews.Count))
+      .ForMember(
+        dest => dest.ProductSizes,
+        opts => opts.MapFrom(src => src.Sizes.Select(size => new ProductSize { Id = size.Id, Title = size.Title }))
+      )
       .ForMember(dest => dest.Rating, opts => opts.MapFrom(src => (double)src.Reviews.Sum(r => r.Rating) / src.Reviews.Count));
   }
 }

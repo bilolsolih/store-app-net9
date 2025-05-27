@@ -32,6 +32,6 @@ public record ProductDetailDto
   public required bool IsLiked { get; set; }
   public required List<Picture> ProductImages { get; set; }
   public required List<ProductSize> ProductSizes { get; set; }
-  public required int ReviewsCount { get; set; }
-  public required double Rating { get; set; }
+  public required int? ReviewsCount { get; set; }
+  public required double? Rating { get; set; }
 }
