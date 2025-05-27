@@ -11,8 +11,8 @@ public class ProductImageConfigurations : IEntityTypeConfiguration<ProductImage>
     builder.ToTable("product_images");
     builder.HasKey(c => c.Id);
 
-    builder.HasIndex(c => c.Image)
-      .IsUnique();
+    // builder.HasIndex(c => c.Image)
+    //   .IsUnique();
 
     builder.HasOne(pi => pi.Product)
       .WithMany(p => p.ProductImages)
