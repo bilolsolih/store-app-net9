@@ -19,34 +19,34 @@ public class AddressConfigurations : IEntityTypeConfiguration<Address>
     builder.Property(a => a.Id)
       .HasColumnName("id")
       .IsRequired();
-    
-        
+
+
     builder.Property(a => a.Title)
       .HasColumnName("title")
       .HasMaxLength(64)
       .IsRequired();
-    
+
     builder.Property(a => a.UserId)
       .HasColumnName("user_id")
       .IsRequired();
-    
+
     builder.Property(a => a.IsDefault)
       .HasColumnName("is_default")
       .IsRequired();
-    
+
     builder.Property(a => a.FullAddress)
       .HasColumnName("full_address")
       .HasMaxLength(128)
       .IsRequired();
-    
+
     builder.Property(a => a.Lat)
       .HasColumnName("lat")
       .IsRequired();
-    
+
     builder.Property(a => a.Lng)
       .HasColumnName("lng")
       .IsRequired();
-        
+
     builder.Property(a => a.Created)
       .HasColumnName("created")
       .HasDefaultValueSql("CURRENT_TIMESTAMP")

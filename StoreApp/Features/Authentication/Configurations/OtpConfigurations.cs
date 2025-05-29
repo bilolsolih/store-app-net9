@@ -35,7 +35,7 @@ public class OtpConfigurations : IEntityTypeConfiguration<Otp>
     builder.Property(c => c.ExpiryDate)
       .HasColumnName("expiry_date")
       .IsRequired();
-    
+
     builder.Property(c => c.Created)
       .HasColumnName("created")
       .HasDefaultValueSql("CURRENT_TIMESTAMP")

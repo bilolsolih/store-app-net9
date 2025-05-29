@@ -17,9 +17,7 @@ public class UserProfile : Profile
         dest => dest.BirthDate,
         opts => opts.MapFrom((src, dest) => src.BirthDate != null ? DateOnly.Parse(src.BirthDate) : dest.BirthDate)
       )
-      .ForAllMembers(
-        opts => opts.Condition(
-          (dto, user, dtoMember) =>
+      .ForAllMembers(opts => opts.Condition((dto, user, dtoMember) =>
           {
             if (dtoMember is string str)
               return !string.IsNullOrEmpty(str);

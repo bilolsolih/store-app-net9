@@ -10,14 +10,12 @@ public static class AuthenticationExtensions
 {
   public static void RegisterAuthenticationFeature(this IServiceCollection services, ConfigurationManager config)
   {
-    services.AddAuthentication(
-      options =>
+    services.AddAuthentication(options =>
       {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
       }
-    ).AddJwtBearer(
-      options =>
+    ).AddJwtBearer(options =>
       {
         var jwtSettings = config.GetSection("JwtSettings");
         options.TokenValidationParameters = new TokenValidationParameters

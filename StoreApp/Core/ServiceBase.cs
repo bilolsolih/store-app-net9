@@ -4,59 +4,59 @@ namespace StoreApp.Core;
 
 public class ServiceBase(string folderName, IWebHostEnvironment webEnv, IHttpContextAccessor httpContextAccessor)
 {
-    private string UploadsBaseAbsolutePath { get; set; } = webEnv.GetUploadBasePath();
-    private string FolderName { get; set; } = folderName;
-    protected string BaseUrl { get; set; } = httpContextAccessor.HttpContext!.GetUploadsBaseUrl();
-    protected HttpContext HttpContext = httpContextAccessor.HttpContext!;
+  private string UploadsBaseAbsolutePath { get; set; } = webEnv.GetUploadBasePath();
+  private string FolderName { get; set; } = folderName;
+  protected string BaseUrl { get; set; } = httpContextAccessor.HttpContext!.GetUploadsBaseUrl();
+  protected HttpContext HttpContext = httpContextAccessor.HttpContext!;
 
 
-    protected async Task<string> SaveUploadsFileAsync(IFormFile file)
+  protected async Task<string> SaveUploadsFileAsync(IFormFile file)
+  {
+    var fileName = $"{GenerateShortGuid()}{GetFileExtension(file)}";
+
+    var filePath = Path.Combine(UploadsBaseAbsolutePath, FolderName, fileName);
+
+    if (!Directory.Exists(Path.Combine(UploadsBaseAbsolutePath, FolderName)))
     {
-        var fileName = $"{GenerateShortGuid()}{GetFileExtension(file)}";
-
-        var filePath = Path.Combine(UploadsBaseAbsolutePath, FolderName, fileName);
-
-        if (!Directory.Exists(Path.Combine(UploadsBaseAbsolutePath, FolderName)))
-        {
-            Directory.CreateDirectory(Path.Combine(UploadsBaseAbsolutePath, FolderName));
-        }
-
-        await using var fileStream = new FileStream(filePath, FileMode.Create);
-        await file.CopyToAsync(fileStream);
-
-        return $"{FolderName}/{fileName}";
+      Directory.CreateDirectory(Path.Combine(UploadsBaseAbsolutePath, FolderName));
     }
 
-    protected bool DeleteUploadsFile(string filename)
-    {
-        if (!CheckUploadsFileExists(filename))
-        {
-            return false;
-        }
+    await using var fileStream = new FileStream(filePath, FileMode.Create);
+    await file.CopyToAsync(fileStream);
 
-        var absoluteFilePath = Path.Combine(UploadsBaseAbsolutePath, filename);
-        File.Delete(absoluteFilePath);
-        return true;
+    return $"{FolderName}/{fileName}";
+  }
+
+  protected bool DeleteUploadsFile(string filename)
+  {
+    if (!CheckUploadsFileExists(filename))
+    {
+      return false;
     }
 
-    protected bool CheckUploadsFileExists(string filename)
-    {
-        var absoluteFilePath = Path.Combine(UploadsBaseAbsolutePath, filename);
+    var absoluteFilePath = Path.Combine(UploadsBaseAbsolutePath, filename);
+    File.Delete(absoluteFilePath);
+    return true;
+  }
 
-        return File.Exists(absoluteFilePath);
-    }
+  protected bool CheckUploadsFileExists(string filename)
+  {
+    var absoluteFilePath = Path.Combine(UploadsBaseAbsolutePath, filename);
 
-    protected string GetFileExtension(IFormFile file)
-    {
-        var fileExtension = Path.GetExtension(file.FileName);
-        InvalidFileException.ThrowIfNull(fileExtension, $"No file extension: {file.FileName}");
+    return File.Exists(absoluteFilePath);
+  }
 
-        return fileExtension;
-    }
+  protected string GetFileExtension(IFormFile file)
+  {
+    var fileExtension = Path.GetExtension(file.FileName);
+    InvalidFileException.ThrowIfNull(fileExtension, $"No file extension: {file.FileName}");
 
-    protected string GenerateShortGuid(int length = 8)
-    {
-        var guid = Guid.NewGuid().ToString("N");
-        return guid[..length];
-    }
+    return fileExtension;
+  }
+
+  protected string GenerateShortGuid(int length = 8)
+  {
+    var guid = Guid.NewGuid().ToString("N");
+    return guid[..length];
+  }
 }

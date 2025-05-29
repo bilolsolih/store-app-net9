@@ -143,7 +143,7 @@ async Task Echo(WebSocket webSocket)
     new ArraySegment<byte>(buffer),
     CancellationToken.None
   );
-  
+
   var jsonString = Encoding.UTF8.GetString(buffer, 0, result.Count);
   var map = JsonSerializer.Deserialize<Dictionary<string, dynamic>>(jsonString);
   map["direction"] = "to";

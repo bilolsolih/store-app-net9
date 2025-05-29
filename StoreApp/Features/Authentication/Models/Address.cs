@@ -6,7 +6,7 @@ public class Address : BaseModel
 {
   public required int UserId { get; set; }
   public User User { get; set; }
-  
+
   public required string Title { get; set; }
   public required string FullAddress { get; set; }
   public required double Lat { get; set; }

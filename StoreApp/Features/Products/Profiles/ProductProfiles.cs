@@ -18,6 +18,9 @@ public class ProductProfiles : Profile
         dest => dest.ProductSizes,
         opts => opts.MapFrom(src => src.Sizes.Select(size => new ProductSize { Id = size.Id, Title = size.Title }))
       )
-      .ForMember(dest => dest.Rating, opts => opts.MapFrom(src => (double)src.Reviews.Sum(r => r.Rating) / src.Reviews.Count));
+      .ForMember(
+        dest => dest.Rating,
+        opts => opts.MapFrom(src => src.Reviews.Count > 0 ? (double)src.Reviews.Sum(r => r.Rating) / src.Reviews.Count : 0)
+      );
   }
 }

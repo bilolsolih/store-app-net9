@@ -4,11 +4,11 @@ namespace StoreApp.Core.Exceptions;
 
 public class InvalidFileException(string message) : Exception(message)
 {
-    public static void ThrowIfNull([NotNull] object? obj, string message)
+  public static void ThrowIfNull([NotNull] object? obj, string message)
+  {
+    if (obj == null)
     {
-        if (obj == null)
-        {
-            throw new InvalidFileException(message);
-        }
+      throw new InvalidFileException(message);
     }
+  }
 }

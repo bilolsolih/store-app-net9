@@ -30,7 +30,7 @@ public class DeviceConfigurations : IEntityTypeConfiguration<Device>
       .HasColumnName("fcm_token")
       .IsRequired()
       .HasMaxLength(4);
-    
+
     builder.Property(d => d.Created)
       .HasColumnName("created")
       .HasDefaultValueSql("CURRENT_TIMESTAMP")

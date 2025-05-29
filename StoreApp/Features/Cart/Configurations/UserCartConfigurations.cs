@@ -15,14 +15,14 @@ public class UserCartConfigurations : IEntityTypeConfiguration<UserCart>
     builder.HasOne(c => c.User)
       .WithOne(u => u.Cart)
       .HasForeignKey<UserCart>(c => c.UserId);
-    
+
     builder.Property(c => c.Id)
       .HasColumnName("id");
-    
+
     builder.Property(c => c.UserId)
       .HasColumnName("user_id")
       .IsRequired();
-    
+
     builder.Property(c => c.Created)
       .HasColumnName("created")
       .HasDefaultValueSql("CURRENT_TIMESTAMP")

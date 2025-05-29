@@ -46,11 +46,8 @@ public class NotificationTypeController(StoreDbContext context, IWebHostEnvironm
     var allNotificationTypes = await context.NotificationTypes
       .ProjectTo<NotificationTypeListDto>(mapper.ConfigurationProvider)
       .ToListAsync();
-    
-    allNotificationTypes.ForEach(nt =>
-    {
-      nt.Icon = $"{HttpContext.GetUploadsBaseUrl()}/{nt.Icon}";
-    });
+
+    allNotificationTypes.ForEach(nt => { nt.Icon = $"{HttpContext.GetUploadsBaseUrl()}/{nt.Icon}"; });
 
     return Ok(allNotificationTypes);
   }

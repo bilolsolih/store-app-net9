@@ -7,7 +7,6 @@ public class CardCreateDto
   public required string SecurityCode { get; set; }
 }
 
-
 public class CardListDto
 {
   public required int Id { get; set; }
